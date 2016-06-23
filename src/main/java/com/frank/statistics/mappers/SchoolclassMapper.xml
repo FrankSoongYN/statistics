@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.frank.statistics.mappers.SchoolclassMapper" >
+  <resultMap id="BaseResultMap" type="com.frank.statistics.pojo.Schoolclass" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="leader" property="leader" jdbcType="VARCHAR" />
+    <result column="gradeId" property="gradeid" jdbcType="INTEGER" />
+    <result column="grade" property="grade" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, leader, gradeId
+  </sql>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from class 
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <sql id="to_query_otherkey">
+  		<if test="name != null" >
+       and  name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="leader != null" >
+       and leader = #{leader,jdbcType=VARCHAR}
+      </if>
+      <if test="gradeid != null" >
+       and gradeId = #{gradeid,jdbcType=INTEGER}
+      </if>
+  </sql>
+  
+  <select id="selectByOtherKey" resultMap="BaseResultMap" parameterType="com.frank.statistics.pojo.Schoolclass" >
+    select 
+    <include refid="Base_Column_List" />
+    from class
+    <where>
+    	<include refid="to_query_otherkey"></include>
+    </where>
+  </select>
+  
+  <select id="selectInfoByOtherKey" resultMap="BaseResultMap" parameterType="com.frank.statistics.pojo.Schoolclass" >
+    select 
+     class.id, class.name, class.leader, class.gradeId
+    ,grade.name as grade
+    from class left join grade on class.gradeid=grade.id
+    <where>
+    	<include refid="to_query_otherkey"></include>
+    </where>
+  </select>
+  
+   <select id="selectCountByOtherKey" resultType="Integer" parameterType="com.frank.statistics.pojo.Schoolclass" >
+    select 
+    count(1)
+    from class
+    <where>
+    	<include refid="to_query_otherkey"></include>
+    </where>
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from class
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.frank.statistics.pojo.Schoolclass" >
+    insert into class ( name, leader, 
+      gradeId)
+    values (#{name,jdbcType=VARCHAR}, #{leader,jdbcType=VARCHAR}, 
+      #{gradeid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.frank.statistics.pojo.Schoolclass" >
+    insert into class
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="leader != null" >
+        leader,
+      </if>
+      <if test="gradeid != null" >
+        gradeId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="leader != null" >
+        #{leader,jdbcType=VARCHAR},
+      </if>
+      <if test="gradeid != null" >
+        #{gradeid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.frank.statistics.pojo.Schoolclass" >
+    update class
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="leader != null" >
+        leader = #{leader,jdbcType=VARCHAR},
+      </if>
+      <if test="gradeid != null" >
+        gradeId = #{gradeid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.frank.statistics.pojo.Schoolclass" >
+    update class
+    set name = #{name,jdbcType=VARCHAR},
+      leader = #{leader,jdbcType=VARCHAR},
+      gradeId = #{gradeid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

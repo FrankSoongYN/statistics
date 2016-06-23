@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<!-- 文件大小到达指定尺寸的时候产生一个新的文件 -->
+	<!-- 设置通道file和输出方式：org.apache.log4j.RollingFileAppender -->
+	<appender name="RollingFile" class="org.apache.log4j.RollingFileAppender">
+		<!-- 设置File参数：日志输出文件名 -->
+		<!--南京 -->
+		<!-- <param name="File" value="/home/tomcat/tomcat8080/logs/Race-log.txt"/> -->
+		<param name="File" value="../logs/wxgeexek.txt" />
+		<!-- 设置是否在重新启动服务时，在原有日志的基础添加新日志 -->
+		<param name="Append" value="true" />
+		<param name="MaxFileSize" value="1MB" />
+		<param name="MaxBackupIndex" value="10000" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<!-- 设置输出文件项目和格式 -->
+			<param name="ConversionPattern" value="[%-5p] %d{yyyy-MM-dd HH:mm:ss} method:%l%n%m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="levelMin" value="debug" />
+			<param name="levelMax" value="error" />
+			<param name="AcceptOnMatch" value="true" />
+		</filter>
+	</appender>
+
+	<!-- 设置监视器输出方式 -->
+	<appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%-5p] %d{yyyy-MM-dd HH:mm:ss} method:%l%n%m%n" />
+		</layout>
+		<!-- 滤镜设置输出的级别 -->
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="levelMin" value="debug" />
+			<param name="levelMax" value="error" />
+			<param name="AcceptOnMatch" value="true" />
+		</filter>
+	</appender>
+	<!-- 按日打印日志,以当日命名log。输出日志到文件 每天一个文件 -->
+	<appender name="dailyRollingFile" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="append" value="true"></param>
+		<param name="ImmediateFlush" value="true"></param>
+		<param name="encoding" value="UTF-8"></param>
+		<param name="File" value="../logs/wxgeexek_log_"></param>
+		<param name="DatePattern" value="yyyy-MM-dd'.txt'"></param>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d{yyyy-MM-dd HH:mm:ss},%p,%F,%X{actionUserId},%X{actionAppid}%n"></param>
+		</layout>
+		<!-- 滤镜设置输出的级别 -->
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="levelMin" value="debug" />
+			<param name="levelMax" value="error" />
+			<param name="AcceptOnMatch" value="true" />
+		</filter>
+	</appender>
+	
+	<!-- 下面是打印mybatis语句的配置-->
+	<category name="java.sql">    
+        <priority value="debug" />    
+    </category>    
+    <category name="org.apache.ibatis">    
+        <priority value="debug" />    
+    </category> 
+	<!-- 指定类的日志级别，会影响指定类日志发出信息的成功与否 -->
+	<!-- <logger name="ref_dailyRollingFile" additivity="false"> <level value="DEBUG" 
+		/> <appender-ref ref="DEBUG" /> </logger> -->
+	<!-- 设置接收所有输出的通道 -->
+	<root>
+		<priority value="debug" /> 
+		<appender-ref ref="RollingFile" />
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="dailyRollingFile" />
+	</root>
+
+</log4j:configuration> 
